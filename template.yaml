@@ -1,0 +1,41 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  SAMLayerTest
+
+  Sample SAM Template for SAMLayerTest
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 30
+
+Resources:
+  LayerTestFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      FunctionName: SAMLayerTest
+      Description: SAM Layer Test
+      CodeUri: layer_test/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Events:
+        LayerTestAPI:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /test
+            Method: get
+
+Outputs:
+  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  LayerTestAPI:
+    Description: "API Gateway endpoint URL for Prod stage for Layer Test function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/test/"
+  LayerTestFunction:
+    Description: "Layer Test Lambda Function ARN"
+    Value: !GetAtt LayerTestFunction.Arn
+  LayerTestFunctionIamRole:
+    Description: "Implicit IAM Role created for Layer Test function"
+    Value: !GetAtt LayerTestFunctionRole.Arn
