@@ -19,12 +19,23 @@ Resources:
       CodeUri: layer_test/
       Handler: app.lambda_handler
       Runtime: python3.8
+      Layers: 
+        - !Ref CommonLayer
       Events:
         LayerTestAPI:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /test
             Method: get
+  CommonLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: sam-app-dependencies
+      ContentUri: dependencies/
+      CompatileRuntimes:
+        - python3.7
+        - python3.8
+      RetentionPolicy: Retain
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
