@@ -21,6 +21,7 @@ Resources:
       Runtime: python3.8
       Layers: 
         - !Ref CommonLayer
+        - !Sub arn:aws:lambda:us-east-1:408956450222:layer:lambda-layer-pandas:1
       Events:
         LayerTestAPI:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
