@@ -1,43 +1,20 @@
 import json
-import displayfunctions
+import curves
+#import boto3
+import pandas as pd
 
-# import requests
-
+#s3 = boto3.client('s3')
 
 def lambda_handler(event, context):
-    """Sample pure Lambda function
-
-    Parameters
-    ----------
-    event: dict, required
-        API Gateway Lambda Proxy Input Format
-
-        Event doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
-
-    context: object, required
-        Lambda Context runtime methods and attributes
-
-        Context doc: https://docs.aws.amazon.com/lambda/latest/dg/python-context-object.html
-
-    Returns
-    ------
-    API Gateway Lambda Proxy Output Format: dict
-
-        Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
-    """
-
-    # try:
-    #     ip = requests.get("http://checkip.amazonaws.com/")
-    # except requests.RequestException as e:
-    #     # Send some context about this error to Lambda Logs
-    #     print(e)
-
-    #     raise e
-
-    return {
-        "statusCode": 200,
-        "body": json.dumps({
-            "message": "This is SAM Layer Test " + displayfunctions.displayText(),
-            # "location": ip.text.replace("\n", "")
-        }),
-    }
+    rawdata = str(event).replace("'","\"")
+    input_js = rawdata
+    input_js = json.loads(input_js)
+    
+    calc_guid = input_js['CalculationGuid']
+    
+    #s3.put_object(Bucket='sigma-test-input-data-3-4-2020', Body=rawdata, Key = calc_guid +'.json')
+    
+    result = curves.get_rolled_curve(rawdata)
+    #s3.put_object(Bucket='sigma-test-input-data-3-4-2020', Body=result, Key = calc_guid +'_result.json')
+    
+    return str(result)
