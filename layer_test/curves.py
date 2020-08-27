@@ -11,4 +11,4 @@ def get_rolled_curve(input_json):
         )
     ed_daily_curve = pd.DataFrame(input_json['EndDateDailyCurveData']['CurveDataList'])
     
-    return str(cons_curve)
+    return cons_curve

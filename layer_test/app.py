@@ -2,6 +2,7 @@ import json
 import curves
 #import boto3
 import pandas as pd
+import displayfunctions
 
 #s3 = boto3.client('s3')
 
@@ -15,12 +16,11 @@ def lambda_handler(event, context):
     
     #s3.put_object(Bucket='sigma-test-input-data-3-4-2020', Body=rawdata, Key = calc_guid +'.json')
     
-    result = curves.get_rolled_curve(input_js)
-    print(str(result))
+    result = curves.get_rolled_curve(input_js)    
     #s3.put_object(Bucket='sigma-test-input-data-3-4-2020', Body=result, Key = calc_guid +'_result.json')
     
     return {
         "statusCode": 200,
-        "body": str(result)
+        "body": displayfunctions.displayText() + ' - Yield of first maturity point is ' + str(result['Yield'][0])
         }
     
