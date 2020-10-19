@@ -10,22 +10,39 @@ Globals:
     Timeout: 30
 
 Resources:
-  LayerTestFunction:
+  CurveFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      FunctionName: SAMLayerTest
-      Description: SAM Layer Test
-      CodeUri: layer_test/
+      FunctionName: CurveFunction
+      Description: Curve Function
+      CodeUri: layer_curve/
       Handler: app.lambda_handler
       Runtime: python3.8
       Layers: 
         - !Ref CommonLayer
         - !Sub arn:aws:lambda:us-east-1:408956450222:layer:lambda-layer-pandas:6
       Events:
-        LayerTestAPI:
+        CurveAPI:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /test
+            Path: /curve
+            Method: post
+  CashflowFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      FunctionName: CashflowFunction
+      Description: Cashflow Function
+      CodeUri: layer_cashflow/
+      Handler: cashflowapp.cf_lambda_handler
+      Runtime: python3.8
+      Layers: 
+        - !Ref CommonLayer
+        - !Sub arn:aws:lambda:us-east-1:408956450222:layer:lambda-layer-pandas:6
+      Events:
+        CashflowAPI:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /cashflow
             Method: post
   CommonLayer:
     Type: AWS::Serverless::LayerVersion
@@ -36,17 +53,3 @@ Resources:
         - python3.8
         - python3.7
       RetentionPolicy: Retain
-
-Outputs:
-  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
-  # Find out more about other implicit resources you can reference within SAM
-  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  LayerTestAPI:
-    Description: "API Gateway endpoint URL for Prod stage for Layer Test function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/test/"
-  LayerTestFunction:
-    Description: "Layer Test Lambda Function ARN"
-    Value: !GetAtt LayerTestFunction.Arn
-  LayerTestFunctionIamRole:
-    Description: "Implicit IAM Role created for Layer Test function"
-    Value: !GetAtt LayerTestFunctionRole.Arn

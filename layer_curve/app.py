@@ -19,6 +19,6 @@ def lambda_handler(event, context):
     
     return {
         "statusCode": 200,
-        "body": displayfunctions.displayText() + ' - Yield of first maturity point is ' + str(result['Yield'][0])
+        "body": displayfunctions.displayText() + ' - CUrves Yield of first maturity point is ' + str(result['Yield'][0])
         }
     
