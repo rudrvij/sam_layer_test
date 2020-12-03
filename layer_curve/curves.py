@@ -3,7 +3,7 @@ import pandas as pd
 
 def get_rolled_curve(input_json):
     
-    input_json = json.loads(input_json)
+    input_json = json.loads(input_json.replace('\\"', '"'))
     
     cons_curve = pd.DataFrame(input_json['ConsultantCurveData'])
     st_daily_curve = pd.DataFrame(
